@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,
   CreateSubscriptionResponseDto,
 } from "./dto/create-subscription.dto";
+import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { Subscriptions } from "./entities/subscription.entity";
 
 @Injectable()
@@ -25,6 +26,18 @@ export class SubscriptionsService {
 
     // 구독 정보 응답
     return newSubscription;
+  }
+
+  async getSubscription(subscriptionId: number): Promise<GetSubscriptionResponseDto> {
+    const subscription = await this.subscriptionsRepository.findOne({
+      where: { id: subscriptionId },
+    });
+
+    if (!subscription) {
+      throw new NotFoundException("존재하지 않는 subscription-id");
+    }
+
+    return subscription;
   }
 
   // create(createSubscriptionDto: CreateSubscriptionDto) {
