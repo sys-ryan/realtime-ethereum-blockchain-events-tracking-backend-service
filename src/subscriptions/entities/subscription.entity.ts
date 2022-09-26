@@ -1,7 +1,9 @@
+import { ChainEventLog } from "../../chain-event-log/entities/chain-event-log.entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -23,4 +25,7 @@ export class Subscriptions {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => ChainEventLog, (chainEventLog) => chainEventLog.subscription)
+  chainEventLogs: ChainEventLog[];
 }

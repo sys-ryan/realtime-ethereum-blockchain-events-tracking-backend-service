@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
 import { Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,
@@ -11,18 +12,26 @@ import { Subscriptions } from "./entities/subscription.entity";
 @Injectable()
 export class SubscriptionsService {
   constructor(
-    @InjectRepository(Subscriptions) private subscriptionsRepository: Repository<Subscriptions>
+    @InjectRepository(Subscriptions) private subscriptionsRepository: Repository<Subscriptions>,
+    private chainEventLogsService: ChainEventLogService
   ) {}
 
   async createSubscription(
     createSubscriptionRequestDto: CreateSubscriptionRequestDto
   ): Promise<CreateSubscriptionResponseDto> {
     // TODO: 구독 중복 체크 (Error: 409 Conflict)
-    // contractAddress가 존재하고 && topic이 모두 일치할 때 충돌
+    // contractAddress가 존재하고 && topic이 모두 일치할 때 충돌 ?
 
     // 구독 정보 DB 저장
     const subscription = await this.subscriptionsRepository.create(createSubscriptionRequestDto);
     const newSubscription = await this.subscriptionsRepository.save(subscription);
+
+    // 등록된 Subscription에 대한 event tracking 시작
+    this.chainEventLogsService.startEventTracking(
+      newSubscription.id,
+      createSubscriptionRequestDto.contractAddress,
+      createSubscriptionRequestDto.topics
+    );
 
     // 구독 정보 응답
     return newSubscription;
