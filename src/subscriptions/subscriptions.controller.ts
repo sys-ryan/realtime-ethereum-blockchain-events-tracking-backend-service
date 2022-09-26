@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  ParseIntPipe,
+} from "@nestjs/common";
 import { SubscriptionsService } from "./subscriptions.service";
 import {
   CreateSubscriptionRequestDto,
   CreateSubscriptionResponseDto,
 } from "./dto/create-subscription.dto";
+import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 
 @Controller("subscriptions")
 export class SubscriptionsController {
@@ -15,6 +26,13 @@ export class SubscriptionsController {
     @Body() createSubscriptionRequestDto: CreateSubscriptionRequestDto
   ): Promise<CreateSubscriptionResponseDto> {
     return this.subscriptionsService.createSubscription(createSubscriptionRequestDto);
+  }
+
+  @Get(":subscription_id")
+  getSubscription(
+    @Param("subscription_id") subscriptionId: number
+  ): Promise<GetSubscriptionResponseDto> {
+    return this.subscriptionsService.getSubscription(subscriptionId);
   }
 
   // @Post()
