@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DatabaseModule } from './database/database.module';
-import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import * as Joi from "joi";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { DatabaseModule } from "./database/database.module";
+import { SubscriptionsModule } from "./subscriptions/subscriptions.module";
+import { ChainEventLogService } from "./chain-event-log/chain-event-logs.service";
+import { ChainEventLogModule } from "./chain-event-log/chain-event-log.module";
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
     }),
     DatabaseModule,
     SubscriptionsModule,
+    ChainEventLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
