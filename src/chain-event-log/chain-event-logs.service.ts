@@ -18,9 +18,15 @@ export class ChainEventLogService {
     private configService: ConfigService
   ) {
     const ethereumEndpoint = this.configService.get<string>("ETHEREUM_ENDPOINT");
-    this.provider = ethers.getDefaultProvider(ethereumEndpoint);
+    this.provider = ethers.getDefaultProvider(ethereumEndpoint); // ethereumEndpoint: wss://...
   }
 
+  /**
+   * address 에 해당하는 Contract의 Smart Contract Event 추적을 시작합니다.
+   * @param subscriptionId 구독 추가시 생성된 구독 id
+   * @param address 추적하고자 하는 Contract의 address
+   * @param topics 필터링할 event hex value
+   */
   startEventTracking(subscriptionId: number, address: string, topics: BLOCKCHAIN_EVENT_ENUM[]) {
     this.logger.log(`Start tracking address "${address}" for the following topics: [${topics}]`);
 
@@ -36,6 +42,12 @@ export class ChainEventLogService {
     });
   }
 
+  /**
+   * chain event log를 db에 저장합니다.
+   * @param subscriptionId 구독 id
+   * @param timestamp 로그의 timestmap
+   * @param logInfo 로그 내용
+   */
   async createEventLog(subscriptionId: number, timestamp: Date, logInfo: ChainEventLog) {
     // ChainEventLog와의 relation을 위해 find subscription
     const subscription = await this.subscriptionsReponsitory.findOne({
