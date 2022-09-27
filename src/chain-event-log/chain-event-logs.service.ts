@@ -28,7 +28,8 @@ export class ChainEventLogService {
 
     contract.on("*", async (event) => {
       if (topics.includes(event.topics[0])) {
-        const currentTime = new Date(); // Log Timestamp
+        const now = new Date(); // Log Timestamp
+        const currentTime = this.getKST(now);
         await this.createEventLog(subscriptionId, currentTime, event);
         this.logger.log(`New EventLog saved for subscription id-"${subscriptionId}"`);
       }
@@ -48,5 +49,12 @@ export class ChainEventLogService {
     });
 
     await this.chainEventLogRepository.save(log);
+  }
+
+  private getKST(now: Date) {
+    const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+    const krTimeDiff = 9 * 60 * 60 * 1000; //한국 시간은 UTC보다 9시간 빠름 (9시간의 밀리세컨드 표현)
+    const kst = new Date(utc + krTimeDiff);
+    return kst;
   }
 }
