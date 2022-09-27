@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { BLOCKCHAIN_EVENT_ENUM } from "src/common/enums/event.enum";
 
@@ -26,6 +27,7 @@ export class CreateSubscriptionResponseDto {
   /**
    * 구독한 이벤트의 토픽
    */
+  @ApiProperty({ enum: BLOCKCHAIN_EVENT_ENUM })
   topics: string[];
 
   /**
