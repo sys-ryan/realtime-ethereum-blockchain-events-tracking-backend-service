@@ -16,6 +16,7 @@ import {
 } from "./dto/create-subscription.dto";
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { ListSubscriptionResponseDto } from "./dto/get-subscription-list.dto";
+import { DeleteSubscriptionResponseDto } from "./dto/delete-subscription.dto";
 
 @Controller("subscriptions")
 export class SubscriptionsController {
@@ -39,6 +40,13 @@ export class SubscriptionsController {
     @Param("subscription_id") subscriptionId: number
   ): Promise<GetSubscriptionResponseDto> {
     return this.subscriptionsService.getSubscription(subscriptionId);
+  }
+
+  @Delete(":subscription_id")
+  removeSubscription(
+    @Param("subscription_id") subscriptionId: number
+  ): Promise<DeleteSubscriptionResponseDto> {
+    return this.subscriptionsService.removeSubscription(subscriptionId);
   }
 
   // @Post()

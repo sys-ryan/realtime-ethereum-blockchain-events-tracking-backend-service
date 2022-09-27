@@ -1,11 +1,13 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
+import { ChainEventLog } from "src/chain-event-log/entities/chain-event-log.entity";
 import { DataSource, Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,
   CreateSubscriptionResponseDto,
 } from "./dto/create-subscription.dto";
+import { DeleteSubscriptionResponseDto } from "./dto/delete-subscription.dto";
 import { ListSubscriptionResponseDto, SubscriptionInfo } from "./dto/get-subscription-list.dto";
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { Subscriptions } from "./entities/subscription.entity";
@@ -14,6 +16,7 @@ import { Subscriptions } from "./entities/subscription.entity";
 export class SubscriptionsService {
   constructor(
     @InjectRepository(Subscriptions) private subscriptionsRepository: Repository<Subscriptions>,
+    @InjectRepository(ChainEventLog) private chainEventLogRepository: Repository<ChainEventLog>,
     private chainEventLogsService: ChainEventLogService,
     private dataSource: DataSource
   ) {}
@@ -77,6 +80,27 @@ export class SubscriptionsService {
       updatedAt,
       logSize,
       firstLogTimestamp,
+    };
+  }
+
+  async removeSubscription(subscriptionId: number): Promise<DeleteSubscriptionResponseDto> {
+    const subscription = await this.subscriptionsRepository.findOne({
+      where: { id: subscriptionId },
+    });
+
+    if (!subscription) {
+      throw new NotFoundException("존재하지 않는 subscription-id");
+    }
+
+    // 삭제할 subscription과 relation을 가진 event log 제거
+    await this.chainEventLogRepository.delete({ subscription: { id: subscriptionId } });
+
+    const deletedSubscription = await this.subscriptionsRepository.remove(subscription);
+    const deletedAt = new Date();
+
+    return {
+      ...deletedSubscription,
+      deletedAt,
     };
   }
 
