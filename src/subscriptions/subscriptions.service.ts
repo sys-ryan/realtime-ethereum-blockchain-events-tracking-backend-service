@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
 import { Repository } from "typeorm";
@@ -19,8 +19,12 @@ export class SubscriptionsService {
   async createSubscription(
     createSubscriptionRequestDto: CreateSubscriptionRequestDto
   ): Promise<CreateSubscriptionResponseDto> {
-    // TODO: 구독 중복 체크 (Error: 409 Conflict)
-    // contractAddress가 존재하고 && topic이 모두 일치할 때 충돌 ?
+    // 구독 중복 체크 (Error: 409 Conflict)
+    // contractAddress가 존재하고 && topic이 모두 일치할 때 conflict
+    const isConflict = await this.checkSubscriptionConflict(createSubscriptionRequestDto);
+    if (isConflict) {
+      throw new ConflictException("이미 존재하는 Subscription 입니다.");
+    }
 
     // 구독 정보 DB 저장
     const subscription = await this.subscriptionsRepository.create(createSubscriptionRequestDto);
@@ -47,6 +51,30 @@ export class SubscriptionsService {
     }
 
     return subscription;
+  }
+
+  /**
+   * subscription 중복 여부를 검사합니다.
+   * @param createSubscriptionRequestDto
+   * @returns true: conflice / false: not conflict
+   */
+  private async checkSubscriptionConflict(
+    createSubscriptionRequestDto: CreateSubscriptionRequestDto
+  ): Promise<boolean> {
+    const subscriptions = await this.subscriptionsRepository.find({
+      where: { contractAddress: createSubscriptionRequestDto.contractAddress },
+    });
+
+    const requestedTopics = JSON.stringify(createSubscriptionRequestDto.topics.sort());
+    for (let i = 0; i < subscriptions.length; i++) {
+      const existingTopics = JSON.stringify(subscriptions[i].topics.sort());
+
+      if (requestedTopics === existingTopics) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   // create(createSubscriptionDto: CreateSubscriptionDto) {
