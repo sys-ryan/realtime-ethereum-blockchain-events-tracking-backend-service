@@ -1,11 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,
   CreateSubscriptionResponseDto,
 } from "./dto/create-subscription.dto";
+import { ListSubscriptionResponseDto, SubscriptionInfo } from "./dto/get-subscription-list.dto";
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { Subscriptions } from "./entities/subscription.entity";
 
@@ -13,7 +14,8 @@ import { Subscriptions } from "./entities/subscription.entity";
 export class SubscriptionsService {
   constructor(
     @InjectRepository(Subscriptions) private subscriptionsRepository: Repository<Subscriptions>,
-    private chainEventLogsService: ChainEventLogService
+    private chainEventLogsService: ChainEventLogService,
+    private dataSource: DataSource
   ) {}
 
   async createSubscription(
@@ -41,16 +43,41 @@ export class SubscriptionsService {
     return newSubscription;
   }
 
+  async getSubscriptionList(): Promise<ListSubscriptionResponseDto> {
+    const subscriptions = await this.subscriptionsRepository.find();
+
+    return { subscriptions };
+  }
+
   async getSubscription(subscriptionId: number): Promise<GetSubscriptionResponseDto> {
     const subscription = await this.subscriptionsRepository.findOne({
       where: { id: subscriptionId },
+      relations: ["chainEventLogs"],
+      order: {
+        chainEventLogs: { timestamp: "ASC" },
+      },
     });
 
     if (!subscription) {
       throw new NotFoundException("존재하지 않는 subscription-id");
     }
 
-    return subscription;
+    console.log(subscription);
+
+    const logSize = subscription.chainEventLogs.length;
+    const firstLogTimestamp = subscription.chainEventLogs[0].timestamp;
+
+    const { id, topics, contractAddress, createdAt, updatedAt } = subscription;
+
+    return {
+      id,
+      topics,
+      contractAddress,
+      createdAt,
+      updatedAt,
+      logSize,
+      firstLogTimestamp,
+    };
   }
 
   /**
