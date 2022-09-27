@@ -9,11 +9,11 @@ export class GetSubscriptionResponseDto {
   /**
    * 서버에 저장된 해당 구독의 로그 수
    */
-  // logSize: number;
+  logSize: number;
 
   // TODO: 첫 번째 로그 timestamp 얻기
   /**
    * 첫 번째 로그의 timestamp
    */
-  // firstLogTimestamp: Date | null;
+  firstLogTimestamp: Date | null;
 }

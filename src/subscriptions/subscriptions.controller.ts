@@ -15,6 +15,7 @@ import {
   CreateSubscriptionResponseDto,
 } from "./dto/create-subscription.dto";
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
+import { ListSubscriptionResponseDto } from "./dto/get-subscription-list.dto";
 
 @Controller("subscriptions")
 export class SubscriptionsController {
@@ -26,6 +27,11 @@ export class SubscriptionsController {
     @Body() createSubscriptionRequestDto: CreateSubscriptionRequestDto
   ): Promise<CreateSubscriptionResponseDto> {
     return this.subscriptionsService.createSubscription(createSubscriptionRequestDto);
+  }
+
+  @Get()
+  getSubscriptionList(): Promise<ListSubscriptionResponseDto> {
+    return this.subscriptionsService.getSubscriptionList();
   }
 
   @Get(":subscription_id")
