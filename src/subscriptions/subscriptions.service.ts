@@ -25,6 +25,11 @@ export class SubscriptionsService {
     private dataSource: DataSource
   ) {}
 
+  /**
+   * 구독 추가
+   * @param createSubscriptionRequestDto 구독 생성시 필요한 데이터
+   * @returns 추가된 구독 정보
+   */
   async createSubscription(
     createSubscriptionRequestDto: CreateSubscriptionRequestDto
   ): Promise<CreateSubscriptionResponseDto> {
@@ -50,12 +55,21 @@ export class SubscriptionsService {
     return newSubscription;
   }
 
+  /**
+   * 구독 목록 조회
+   * @returns 구독 목록
+   */
   async getSubscriptionList(): Promise<ListSubscriptionResponseDto> {
     const subscriptions = await this.subscriptionsRepository.find();
 
     return { subscriptions };
   }
 
+  /**
+   * 구독 정보 조회
+   * @param subscriptionId 조회할 구독 id
+   * @returns 구독 정보
+   */
   async getSubscription(subscriptionId: number): Promise<GetSubscriptionResponseDto> {
     const subscription = await this.subscriptionsRepository.findOne({
       where: { id: subscriptionId },
@@ -68,8 +82,6 @@ export class SubscriptionsService {
     if (!subscription) {
       throw new NotFoundException("존재하지 않는 subscription-id");
     }
-
-    console.log(subscription);
 
     const logSize = subscription.chainEventLogs.length;
     const firstLogTimestamp = subscription.chainEventLogs[0].timestamp;
@@ -87,6 +99,11 @@ export class SubscriptionsService {
     };
   }
 
+  /**
+   * 구독 제거
+   * @param subscriptionId 제거할 구독 id
+   * @returns 제거된 구독 정보
+   */
   async removeSubscription(subscriptionId: number): Promise<DeleteSubscriptionResponseDto> {
     const subscription = await this.subscriptionsRepository.findOne({
       where: { id: subscriptionId },
@@ -108,6 +125,12 @@ export class SubscriptionsService {
     };
   }
 
+  /**
+   * 구독에서 발생한 로그 조회
+   * @param subscriptionId 로그를 조회할 구독 id
+   * @param query 로그 조회시 데이터 필터링 정책
+   * @returns 구독에서 발생한 로그 목록
+   */
   async getEventLogs(
     subscriptionId: number,
     query: GetSubscriptionLogsQueryDto
@@ -179,7 +202,9 @@ export class SubscriptionsService {
 
   /**
    * subscription 중복 여부를 검사합니다.
-   * @param createSubscriptionRequestDto
+   * 이미 db에 contractAddress가 존재하고 && topics의 elements가 일치할 경우 conflict로 판단
+   * 이미 db에 contractAddress가 존재하지, topics의 elements 구성이 다를 경우 conflict 가 아니라고 판단. (-> 새로운 구독 생성)
+   * @param createSubscriptionRequestDto 구독 생성을 위한 정보
    * @returns true: conflice / false: not conflict
    */
   private async checkSubscriptionConflict(
@@ -200,24 +225,4 @@ export class SubscriptionsService {
 
     return false;
   }
-
-  // create(createSubscriptionDto: CreateSubscriptionDto) {
-  //   return 'This action adds a new subscription';
-  // }
-
-  // findAll() {
-  //   return `This action returns all subscriptions`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} subscription`;
-  // }
-
-  // update(id: number, updateSubscriptionDto: UpdateSubscriptionDto) {
-  //   return `This action updates a #${id} subscription`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} subscription`;
-  // }
 }
