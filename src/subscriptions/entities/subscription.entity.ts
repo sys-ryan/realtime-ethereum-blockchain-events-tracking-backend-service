@@ -10,20 +10,19 @@ import {
 
 @Entity()
 export class Subscriptions {
-  // TODO: Column 정보 detail 작성
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: "simple-array" })
   topics: string[];
 
-  @Column()
+  @Column({ type: "varchar", length: "255" })
   contractAddress: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "created_at", type: "datetime" })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at", type: "datetime" })
   updatedAt: Date;
 
   @OneToMany(() => ChainEventLog, (chainEventLog) => chainEventLog.subscription)

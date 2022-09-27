@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
   ParseIntPipe,
+  Query,
 } from "@nestjs/common";
 import { SubscriptionsService } from "./subscriptions.service";
 import {
@@ -17,6 +17,10 @@ import {
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { ListSubscriptionResponseDto } from "./dto/get-subscription-list.dto";
 import { DeleteSubscriptionResponseDto } from "./dto/delete-subscription.dto";
+import {
+  GetSubscriptionLogsQueryDto,
+  GetSubscriptionLogsResponseDto,
+} from "./dto/get-subscription-logs.dto";
 
 @Controller("subscriptions")
 export class SubscriptionsController {
@@ -44,33 +48,16 @@ export class SubscriptionsController {
 
   @Delete(":subscription_id")
   removeSubscription(
-    @Param("subscription_id") subscriptionId: number
+    @Param("subscription_id", ParseIntPipe) subscriptionId: number
   ): Promise<DeleteSubscriptionResponseDto> {
     return this.subscriptionsService.removeSubscription(subscriptionId);
   }
 
-  // @Post()
-  // create(@Body() createSubscriptionDto: CreateSubscriptionDto) {
-  //   return this.subscriptionsService.create(createSubscriptionDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.subscriptionsService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.subscriptionsService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateSubscriptionDto: UpdateSubscriptionDto) {
-  //   return this.subscriptionsService.update(+id, updateSubscriptionDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.subscriptionsService.remove(+id);
-  // }
+  @Get(":subscription_id/logs")
+  getEventLogs(
+    @Param("subscription_id", ParseIntPipe) subscriptionId: number,
+    @Query() query: GetSubscriptionLogsQueryDto
+  ): Promise<GetSubscriptionLogsResponseDto> {
+    return this.subscriptionsService.getEventLogs(subscriptionId, query);
+  }
 }

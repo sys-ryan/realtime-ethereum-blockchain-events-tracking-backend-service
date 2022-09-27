@@ -9,7 +9,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: "sqlite",
-        database: `database.db`,
+        database: configService.get<string>("DB_NAME"),
         entities: ["dist/**/*.entity{.ts,.js}"],
         synchronize: false,
         autoLoadEntities: true,
