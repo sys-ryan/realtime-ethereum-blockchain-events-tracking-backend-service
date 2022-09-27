@@ -84,7 +84,7 @@ export class SubscriptionsService {
     }
 
     const logSize = subscription.chainEventLogs.length;
-    const firstLogTimestamp = subscription.chainEventLogs[0].timestamp;
+    const firstLogTimestamp = subscription.chainEventLogs[0]?.timestamp || null;
 
     const { id, topics, contractAddress, createdAt, updatedAt } = subscription;
 
