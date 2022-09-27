@@ -2,12 +2,16 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { InjectRepository } from "@nestjs/typeorm";
 import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
 import { ChainEventLog } from "src/chain-event-log/entities/chain-event-log.entity";
-import { DataSource, Repository } from "typeorm";
+import { Between, DataSource, Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,
   CreateSubscriptionResponseDto,
 } from "./dto/create-subscription.dto";
 import { DeleteSubscriptionResponseDto } from "./dto/delete-subscription.dto";
+import {
+  GetSubscriptionLogsQueryDto,
+  GetSubscriptionLogsResponseDto,
+} from "./dto/get-subscription-logs.dto";
 import { ListSubscriptionResponseDto, SubscriptionInfo } from "./dto/get-subscription-list.dto";
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { Subscriptions } from "./entities/subscription.entity";
@@ -102,6 +106,75 @@ export class SubscriptionsService {
       ...deletedSubscription,
       deletedAt,
     };
+  }
+
+  async getEventLogs(
+    subscriptionId: number,
+    query: GetSubscriptionLogsQueryDto
+  ): Promise<GetSubscriptionLogsResponseDto> {
+    const { sort, start, end, offset, limit } = query;
+
+    // 조회할 로그의 timestamp 조건을 Date object로 변환 (TypeORM 의 Between() 의 파라미터 요구사항)
+    let startTimestamp;
+    let endTimestamp;
+    if (!start) {
+      startTimestamp = new Date(1000000000000);
+    } else {
+      startTimestamp = new Date(start);
+    }
+
+    if (!end) {
+      endTimestamp = new Date(9999999999999);
+    } else {
+      endTimestamp = new Date(end);
+    }
+
+    // 존재하지 않는 subscription-id 인 경우 (404 Not Found)
+    const subscription = await this.subscriptionsRepository.findOne({
+      where: { id: subscriptionId },
+    });
+    if (!subscription) {
+      throw new NotFoundException("존재하지 않는 subscription-id");
+    }
+
+    // EventLog DB query
+    const logs = await this.chainEventLogRepository.find({
+      where: {
+        subscription: { id: subscriptionId },
+        timestamp: Between(startTimestamp, endTimestamp),
+      },
+      skip: offset,
+      take: limit,
+      order: {
+        timestamp: sort,
+      },
+    });
+
+    // 추가 필드 생성 (logSize, logSizeInCondition, offset, limit, sort, start, end)
+    const logSize = (
+      await this.dataSource
+        .getRepository(ChainEventLog)
+        .createQueryBuilder("event")
+        .select("COUNT(event.id)", "logSize")
+        .where("event.subscriptionId = :subscriptionId", { subscriptionId })
+        .execute()
+    )[0].logSize;
+
+    const logSizeInCondition = logs.length;
+
+    const response = {
+      id: subscriptionId,
+      logSize,
+      logSizeInCondition,
+      offset,
+      limit,
+      sort,
+      start,
+      end,
+      logs,
+    };
+
+    return response;
   }
 
   /**

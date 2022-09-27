@@ -5,7 +5,6 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DatabaseModule } from "./database/database.module";
 import { SubscriptionsModule } from "./subscriptions/subscriptions.module";
-import { ChainEventLogService } from "./chain-event-log/chain-event-logs.service";
 import { ChainEventLogModule } from "./chain-event-log/chain-event-log.module";
 
 @Module({
@@ -14,10 +13,6 @@ import { ChainEventLogModule } from "./chain-event-log/chain-event-log.module";
       envFilePath: `.${process.env.NODE_ENV}.env`,
       validationSchema: Joi.object({
         PORT: Joi.number(),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_USERNAME: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
       }),
     }),
@@ -29,3 +24,4 @@ import { ChainEventLogModule } from "./chain-event-log/chain-event-log.module";
   providers: [AppService],
 })
 export class AppModule {}
+// TODO: onApplicationBootstrap()에서 suscription event tracking 시작하기 (서비스 재시작시 event tracking 재시작 필요)
