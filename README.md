@@ -110,19 +110,27 @@ export enum BLOCKCHAIN_EVENT_ENUM {
 
     ```typescript
     export class CreateSubscriptionsResponseDto {
-      /** * 구독 id (:subscription-id) */
+      /** 
+      * 구독 id (:subscription-id) 
+      */
       id: number;
 
       /** * 구독한 이벤트의 토픽 */
       topics: string[];
 
-      /** * 이벤트를 구독한 스마트 컨트랙트의 주소 */
+      /** 
+      * 이벤트를 구독한 스마트 컨트랙트의 주소 
+      */
       contractAddress: string;
 
-      /** * 구독 생성일시. 서버에서는 Date 객체로 다루지만 응답은 string 으로 내려준다 */
+      /** 
+      * 구독 생성일시. 서버에서는 Date 객체로 다루지만 응답은 string 으로 내려준다 
+      */
       createdAt: Date;
 
-      /** * 구독 최종 수정일시. 서버에서는 Date 객체로 다루지만 응답은 string 으로 내려준다 */
+      /** 
+      * 구독 최종 수정일시. 서버에서는 Date 객체로 다루지만 응답은 string 으로 내려준다 
+      */
       updatedAt: Date;
     }
     ```
@@ -223,10 +231,12 @@ export enum BLOCKCHAIN_EVENT_ENUM {
         contractAddress: string;
         createdAt: Date;
         updatedAt: Date;
+        
         /**
          * 서버에 저장된 해당 구독의 로그 수
          */
         logSize: number;
+        
         /**
          * 첫 번째 로그의 timestamp
          */
@@ -279,6 +289,7 @@ export enum BLOCKCHAIN_EVENT_ENUM {
         contractAddress: string;
         createdAt: Date;
         updatedAt: Date;
+        
         /**
          * 구독을 삭제한 일시. 서버에서는 Date 객체로 다루지만 응답은 string 으로 내려준다
          */
@@ -361,10 +372,12 @@ export enum BLOCKCHAIN_EVENT_ENUM {
          * 로그의 id. number 가 아니라 string (uuid) 형식도 좋습니다.
          */
         id: number;
+        
         /**
          * 로그의 timestamp. 서버에서는 Date 객체로 다루지만 응답은 string 으로 내려준다
          */
         timestamp: Date;
+        
         // 아래는 ethers.js 에서 내려주는 체인 이벤트 로그의 정보들입니다.
         // 아래 링크를 참고해주세요
         // https://github.com/ethersio/ethers.js/blob/608864fc3f00390e1260048a157af00378a98e41/packages/abstractprovider/src.ts/index.ts#L90_L104
