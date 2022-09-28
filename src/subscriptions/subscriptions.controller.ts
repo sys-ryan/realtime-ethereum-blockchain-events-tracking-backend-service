@@ -22,7 +22,10 @@ import {
   GetSubscriptionLogsResponseDto,
 } from "./dto/get-subscription-logs.dto";
 import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiProperty,
@@ -42,6 +45,8 @@ export class SubscriptionsController {
     description: "Smart Contract Event에 대한 구독을 추가합니다.",
     type: CreateSubscriptionResponseDto,
   })
+  @ApiBadRequestResponse({ description: "요청의 header 나 body가 잘못된 경우" })
+  @ApiConflictResponse({ description: "서버에 이미 존재하는 구독인 경우" })
   @HttpCode(201)
   @Post()
   createSubscription(
@@ -59,6 +64,7 @@ export class SubscriptionsController {
 
   @ApiOperation({ summary: "구독 정보 조회 API", description: "구독 정보를 조회합니다." })
   @ApiOkResponse({ description: "구독 정보를 조회합니다.", type: GetSubscriptionResponseDto })
+  @ApiNotFoundResponse({ description: "존재하지 않는 subscription-id 인 경우" })
   @Get(":subscription_id")
   getSubscription(
     @Param("subscription_id") subscriptionId: number
@@ -68,6 +74,7 @@ export class SubscriptionsController {
 
   @ApiOperation({ summary: "구독 삭제 API", description: "구독을 삭제합니다." })
   @ApiOkResponse({ description: "구독을 삭제합니다.", type: DeleteSubscriptionResponseDto })
+  @ApiNotFoundResponse({ description: "존재하지 않는 subscription-id 인 경우" })
   @Delete(":subscription_id")
   removeSubscription(
     @Param("subscription_id", ParseIntPipe) subscriptionId: number
@@ -83,6 +90,8 @@ export class SubscriptionsController {
     description: "구독한 이벤트의 로그 목록을 조회합니다.",
     type: GetSubscriptionLogsResponseDto,
   })
+  @ApiBadRequestResponse({ description: "쿼리 파라미터의 값이 잘못된 경우" })
+  @ApiNotFoundResponse({ description: "존재하지 않는 subscription-id 인 경우" })
   @Get(":subscription_id/logs")
   getEventLogs(
     @Param("subscription_id", ParseIntPipe) subscriptionId: number,
