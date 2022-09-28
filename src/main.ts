@@ -19,6 +19,10 @@ async function bootstrap() {
     .setTitle("Realtime Ethereum(ETH) Blockchain Events Tracking Backend Service")
     .setDescription("실시간 Ethereum Blockchain 추적 백엔드 서비스")
     .setVersion("1.0")
+    .addBearerAuth(
+      { type: "http", scheme: "bearer", bearerFormat: "JWT", in: "header" },
+      "Authorization"
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, docsConfig);
