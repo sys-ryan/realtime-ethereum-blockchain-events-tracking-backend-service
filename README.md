@@ -510,7 +510,10 @@ swagger를 사용하여 제작한 API Docs
 
 ### 모델링
 
-// TODO : modeling image
+<img width="827" alt="스크린샷 2022-09-28 오후 5 48 18" src="https://user-images.githubusercontent.com/63445753/192753614-5d0041a6-9772-47ed-bae9-2b5b4092a382.png">
+
+subscription과 chain_event_log를 One-to-One 관계로 mapping 하였습니다. 
+event log 조회 시 subscription id로 조회가 가능하도록 하기 위해 위와 같이 구성하였습니다. 
 
 ### 폴더 구조
 
