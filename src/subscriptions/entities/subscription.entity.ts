@@ -13,7 +13,7 @@ export class Subscriptions {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "simple-array" })
+  @Column({ type: "text", array: true })
   topics: string[];
 
   @Column({ type: "varchar", length: "255" })

@@ -6,6 +6,8 @@ import { AppService } from "./app.service";
 import { DatabaseModule } from "./database/database.module";
 import { SubscriptionsModule } from "./subscriptions/subscriptions.module";
 import { ChainEventLogModule } from "./chain-event-log/chain-event-log.module";
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ChainEventLogModule } from "./chain-event-log/chain-event-log.module";
     DatabaseModule,
     SubscriptionsModule,
     ChainEventLogModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
