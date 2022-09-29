@@ -6,13 +6,15 @@ import { ChainEventLogService } from "../chain-event-log/chain-event-logs.servic
 import { ChainEventLog } from "../chain-event-log/entities/chain-event-log.entity";
 import { Subscriptions } from "./entities/subscription.entity";
 import { SubscriptionsService } from "./subscriptions.service";
-import { ConflictException } from "@nestjs/common";
+import { ConflictException, NotFoundException } from "@nestjs/common";
 
 const subscriptions: Subscriptions[] = [];
 
 const chainEventLogs: ChainEventLog[] = [];
 
-const mockChainEventLogRepository = () => ({});
+const mockChainEventLogRepository = () => ({
+  delete: jest.fn(),
+});
 
 const mockSubscriptionsRepository = () => ({
   find: jest.fn().mockImplementation(async (query) => {
@@ -28,7 +30,19 @@ const mockSubscriptionsRepository = () => ({
 
     return existingSubscriptions;
   }),
-  findOne: jest.fn(),
+  findOne: jest.fn().mockImplementation(async (query) => {
+    const where = query.where;
+
+    let existingSubscription: Subscriptions;
+
+    if (where.id) {
+      existingSubscription = subscriptions.find((subscription) => {
+        return subscription.id === where.id;
+      });
+    }
+
+    return existingSubscription;
+  }),
   create: jest.fn().mockImplementation((subscriptionDto) => {
     return subscriptionDto;
   }),
@@ -126,6 +140,32 @@ describe("SubscriptionsService", () => {
   });
 
   describe("구독 정보 조회", () => {
-    it(" 존재하지 않는 subscription-id 일 경우 NotFoundException", async () => {});
+    it(" 존재하지 않는 subscription-id 일 경우 NotFoundException", async () => {
+      const subscription = await service.createSubscription({
+        contractAddress: DAI_CONTRACT_ADDRESS,
+        topics: [BLOCKCHAIN_EVENT_ENUM.APPROVAL],
+      });
+
+      expect(subscriptions).toHaveLength(1);
+
+      await expect(service.getSubscription(Math.random())).rejects.toBeInstanceOf(
+        NotFoundException
+      );
+    });
+  });
+
+  describe("구독 제거", () => {
+    it("존재하지 않는 subscription-id일 경우 NotFoundException", async () => {
+      const subscription = await service.createSubscription({
+        contractAddress: DAI_CONTRACT_ADDRESS,
+        topics: [BLOCKCHAIN_EVENT_ENUM.APPROVAL],
+      });
+
+      expect(subscriptions).toHaveLength(1);
+
+      await expect(service.removeSubscription(Math.random())).rejects.toBeInstanceOf(
+        NotFoundException
+      );
+    });
   });
 });
