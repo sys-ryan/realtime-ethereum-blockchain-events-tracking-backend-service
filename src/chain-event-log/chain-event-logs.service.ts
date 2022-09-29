@@ -1,11 +1,11 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { BLOCKCHAIN_EVENT_ENUM } from "src/common/enums/event.enum";
+import { BLOCKCHAIN_EVENT_ENUM } from "../common/enums/event.enum";
 import { ethers } from "ethers";
 import { ConfigService } from "@nestjs/config";
 import { ChainEventLog } from "./entities/chain-event-log.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Subscriptions } from "src/subscriptions/entities/subscription.entity";
+import { Subscriptions } from "../subscriptions/entities/subscription.entity";
 
 @Injectable()
 export class ChainEventLogService {
@@ -14,7 +14,7 @@ export class ChainEventLogService {
 
   constructor(
     @InjectRepository(ChainEventLog) private chainEventLogRepository: Repository<ChainEventLog>,
-    @InjectRepository(Subscriptions) private subscriptionsReponsitory: Repository<Subscriptions>,
+    @InjectRepository(Subscriptions) private subscriptionsRepository: Repository<Subscriptions>,
     private configService: ConfigService
   ) {
     const ethereumEndpoint = this.configService.get<string>("ETHEREUM_ENDPOINT");
@@ -50,7 +50,7 @@ export class ChainEventLogService {
    */
   async createEventLog(subscriptionId: number, timestamp: Date, logInfo: ChainEventLog) {
     // ChainEventLog와의 relation을 위해 find subscription
-    const subscription = await this.subscriptionsReponsitory.findOne({
+    const subscription = await this.subscriptionsRepository.findOne({
       where: { id: subscriptionId },
     });
 
