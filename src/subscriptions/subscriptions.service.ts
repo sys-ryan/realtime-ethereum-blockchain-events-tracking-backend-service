@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
-import { ChainEventLog } from "src/chain-event-log/entities/chain-event-log.entity";
+import { ChainEventLogService } from "../chain-event-log/chain-event-logs.service";
+import { ChainEventLog } from "../chain-event-log/entities/chain-event-log.entity";
 import { Between, DataSource, Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,

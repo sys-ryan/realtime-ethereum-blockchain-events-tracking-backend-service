@@ -1,4 +1,4 @@
-import { Subscriptions } from "src/subscriptions/entities/subscription.entity";
+import { Subscriptions } from "../../subscriptions/entities/subscription.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
