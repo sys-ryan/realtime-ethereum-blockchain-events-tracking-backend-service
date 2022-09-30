@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ChainEventLogService } from "src/chain-event-log/chain-event-logs.service";
-import { ChainEventLog } from "src/chain-event-log/entities/chain-event-log.entity";
+import { ChainEventLogService } from "../chain-event-log/chain-event-logs.service";
+import { ChainEventLog } from "../chain-event-log/entities/chain-event-log.entity";
 import { Between, DataSource, Repository } from "typeorm";
 import {
   CreateSubscriptionRequestDto,
@@ -62,7 +62,15 @@ export class SubscriptionsService {
   async getSubscriptionList(): Promise<ListSubscriptionResponseDto> {
     const subscriptions = await this.subscriptionsRepository.find();
 
+    this.formatSubscriptions(subscriptions);
+
     return { subscriptions };
+  }
+
+  private formatSubscriptions(subscriptions: Subscriptions[]) {
+    for (let i = 0; i < subscriptions.length; i++) {
+      subscriptions[i].topics = subscriptions[i].topics.toString().split(",");
+    }
   }
 
   /**
@@ -88,9 +96,11 @@ export class SubscriptionsService {
 
     const { id, topics, contractAddress, createdAt, updatedAt } = subscription;
 
+    const formattedTopics = topics.toString().split(",");
+
     return {
       id,
-      topics,
+      topics: formattedTopics,
       contractAddress,
       createdAt,
       updatedAt,

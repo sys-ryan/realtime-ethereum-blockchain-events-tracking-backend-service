@@ -1,4 +1,4 @@
-import { Subscriptions } from "src/subscriptions/entities/subscription.entity";
+import { Subscriptions } from "../../subscriptions/entities/subscription.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -35,7 +35,7 @@ export class ChainEventLog {
   @Column({ type: "varchar", length: "255" })
   data: string;
 
-  @Column({ type: "text", array: true })
+  @Column({ type: "simple-array", array: true })
   topics: string[];
 
   @Column({ type: "varchar", length: "255" })

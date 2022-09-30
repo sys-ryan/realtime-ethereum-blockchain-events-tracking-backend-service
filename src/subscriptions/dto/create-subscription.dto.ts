@@ -1,13 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { BLOCKCHAIN_EVENT_ENUM } from "src/common/enums/event.enum";
+import { BLOCKCHAIN_EVENT_ENUM } from "../../common/enums/event.enum";
 
 export class CreateSubscriptionRequestDto {
   /**
    * 구독할 이벤트의 토픽
    */
   @IsEnum(BLOCKCHAIN_EVENT_ENUM, { each: true })
-  // TODO:  string[] 대신 ENUM 사용한 이유 설명 작성
+  // CreateSubscriptionRequestDto.topics type을 string[] 에서 BLOCKCHAIN_EVENT_ENUM[] 으로 변경
+  // 존재하지 않는 topic hash 값일 경우 오류 처리를 용이하게 하기 위함.
+  // 존재하지 않는 topic hash 값일 경우 결과적으로 아무런 로그 정보도 저장되지 않을 것이며, 이 경우 요청 측에서 이 상황을 파악할 수 있도록 하는 것이 합리적이라고 판단.
   topics: BLOCKCHAIN_EVENT_ENUM[];
 
   /**
@@ -27,7 +29,7 @@ export class CreateSubscriptionResponseDto {
   /**
    * 구독한 이벤트의 토픽
    */
-  @ApiProperty({ enum: BLOCKCHAIN_EVENT_ENUM })
+  @ApiProperty({ enum: BLOCKCHAIN_EVENT_ENUM, isArray: true })
   topics: string[];
 
   /**
