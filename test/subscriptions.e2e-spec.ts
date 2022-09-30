@@ -1,5 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication } from "@nestjs/common";
+import { BadRequestException, INestApplication } from "@nestjs/common";
 import * as request from "supertest";
 import { AppModule } from "./../src/app.module";
 import { setupApp } from "./setup-app";
@@ -114,6 +114,82 @@ describe("Subscriptions (e2e)", () => {
       ).body;
 
       expect(response.deletedAt).toBeDefined();
+    });
+  });
+
+  describe("구독에서 발생한 로그 조회", () => {
+    it("구독에서 발생한 로그 조회시 Query parameter validation 기능 검증", async () => {
+      const subscription = (
+        await request(app.getHttpServer())
+          .post("/api/v1/subscriptions")
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            topics: [BLOCKCHAIN_EVENT_ENUM.TRANSFER, BLOCKCHAIN_EVENT_ENUM.APPROVAL],
+            contractAddress: DAI_CONTRACT_ADDRESS,
+          })
+      ).body;
+
+      let response = (
+        await request(app.getHttpServer())
+          .get(`/api/v1/subscriptions/${subscription.id}/logs?sort=adsf`)
+          .set("Authorization", `Bearer ${token}`)
+      ).body;
+      expect(response.error).toEqual("Bad Request");
+
+      response = (
+        await request(app.getHttpServer())
+          .get(`/api/v1/subscriptions/${subscription.id}/logs?start=0`)
+          .set("Authorization", `Bearer ${token}`)
+      ).body;
+      expect(response.error).toEqual("Bad Request");
+
+      response = (
+        await request(app.getHttpServer())
+          .get(`/api/v1/subscriptions/${subscription.id}/logs?end=0`)
+          .set("Authorization", `Bearer ${token}`)
+      ).body;
+      expect(response.error).toEqual("Bad Request");
+    });
+
+    it("query parameter 'start', 'end' default value 적용 검증", async () => {
+      const subscription = (
+        await request(app.getHttpServer())
+          .post("/api/v1/subscriptions")
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            topics: [BLOCKCHAIN_EVENT_ENUM.TRANSFER, BLOCKCHAIN_EVENT_ENUM.APPROVAL],
+            contractAddress: DAI_CONTRACT_ADDRESS,
+          })
+      ).body;
+
+      const response = (
+        await request(app.getHttpServer())
+          .get(`/api/v1/subscriptions/${subscription.id}/logs`)
+          .set("Authorization", `Bearer ${token}`)
+      ).body;
+      expect(response.start).toBe(null);
+      expect(response.end).toBe(null);
+    });
+
+    it("query parameter 'offset', 'limit' default value 적용 검증", async () => {
+      const subscription = (
+        await request(app.getHttpServer())
+          .post("/api/v1/subscriptions")
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            topics: [BLOCKCHAIN_EVENT_ENUM.TRANSFER, BLOCKCHAIN_EVENT_ENUM.APPROVAL],
+            contractAddress: DAI_CONTRACT_ADDRESS,
+          })
+      ).body;
+
+      const response = (
+        await request(app.getHttpServer())
+          .get(`/api/v1/subscriptions/${subscription.id}/logs`)
+          .set("Authorization", `Bearer ${token}`)
+      ).body;
+
+      expect(response.offset).toEqual(0);
+      expect(response.limit).toEqual(50);
     });
   });
 });
