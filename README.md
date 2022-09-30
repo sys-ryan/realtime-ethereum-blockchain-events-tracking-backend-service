@@ -556,7 +556,7 @@ realtime-ethereum-blockchain-events-tracking-backend-service/
 ✔️ Readme.md 작성  
 ⭐️ Unit test 수행  
 ⭐️ e2e test 수행  
-⭐️ 배포 // TODO
+⭐️ 배포  
 
 # 테스트
 
@@ -620,30 +620,36 @@ realtime-ethereum-blockchain-events-tracking-backend-service/
 
 # 서비스 배포
 
-// TODO
+### 서비스 시작
+<img width="1247" alt="스크린샷 2022-10-01 오전 1 39 56" src="https://user-images.githubusercontent.com/63445753/193328306-7bc73e6b-9b09-496c-b7b1-fcf9e0f1fd2b.png">
 
-<!--
-NestJS Server: <img
-      src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"
-    />
-Redis Cluster: <img
-      src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"
-    />
-Database: <img
-      src="https://img.shields.io/badge/Amazon RDS-FF9900?style=for-the-badge&logo=amazonrds&logoColor=white"
-    />
-<img
-      src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"
-    />
+### 체인 이벤트 추적 시작
 
-### EC2 배포 화면
+<img width="1247" alt="스크린샷 2022-10-01 오전 1 54 30" src="https://user-images.githubusercontent.com/63445753/193328387-34218051-4057-4a53-8102-f3be43ed9d12.png">
 
-<img width="1678" alt="스크린샷 2022-09-20 오후 11 22 52" src="https://user-images.githubusercontent.com/63445753/191448074-a365c14a-d83c-4f4f-b009-842ea696ad5b.png">
 
-### 서버 SSH 접속 화면
+### 체인 이벤트 추적 로그 (실시간)
 
-<img width="1218" alt="스크린샷 2022-09-21 오후 4 39 47" src="https://user-images.githubusercontent.com/63445753/191445974-6871e18c-5810-4c25-97aa-3ada5b83ed55.png">
+<img width="1247" alt="스크린샷 2022-10-01 오전 1 59 56" src="https://user-images.githubusercontent.com/63445753/193328446-4df7537f-3176-40c9-8310-2472d89f1fb8.png">
 
-### 보스레이드 상태조회 결과 화면
 
-<img width="1678" alt="스크린샷 2022-09-20 오후 11 27 05" src="https://user-images.githubusercontent.com/63445753/191285577-fe9ec233-733f-456f-9c07-684d2f467b3a.png"> -->
+### 체인 이벤트 목록 조회 
+
+<img width="1205" alt="스크린샷 2022-10-01 오전 2 01 23" src="https://user-images.githubusercontent.com/63445753/193328523-db87a094-41e3-409d-babe-d461b9245b34.png">
+
+
+### 체인 이벤트 정보 조회
+
+<img width="1217" alt="스크린샷 2022-10-01 오전 2 00 47" src="https://user-images.githubusercontent.com/63445753/193328566-e82ed46b-7e55-451d-ad1e-a7e393b6acc2.png">
+
+
+### 구독에서 발생한 로그 조회
+
+<img width="1202" alt="스크린샷 2022-10-01 오전 2 02 29" src="https://user-images.githubusercontent.com/63445753/193328668-6c63a8a9-535b-4089-b672-8c4e04a4805f.png">
+
+### 유저 로그인
+
+<img width="1205" alt="스크린샷 2022-10-01 오전 2 02 45" src="https://user-images.githubusercontent.com/63445753/193328712-bdb189a4-820b-4e07-bbf9-5b43b7c95cc3.png">
+
+
+
