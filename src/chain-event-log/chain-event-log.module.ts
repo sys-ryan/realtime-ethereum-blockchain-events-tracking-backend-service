@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Subscriptions } from "src/subscriptions/entities/subscription.entity";
+import { Subscriptions } from "../subscriptions/entities/subscription.entity";
 import { ChainEventLogService } from "./chain-event-logs.service";
 import { ChainEventLog } from "./entities/chain-event-log.entity";
 
