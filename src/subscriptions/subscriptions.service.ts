@@ -15,6 +15,7 @@ import {
 import { ListSubscriptionResponseDto, SubscriptionInfo } from "./dto/get-subscription-list.dto";
 import { GetSubscriptionResponseDto } from "./dto/get-subscription.dto";
 import { Subscriptions } from "./entities/subscription.entity";
+import { of } from "rxjs";
 
 @Injectable()
 export class SubscriptionsService {
@@ -225,6 +226,7 @@ export class SubscriptionsService {
     });
 
     const requestedTopics = JSON.stringify(createSubscriptionRequestDto.topics.sort());
+    console.log(subscriptions.length);
     for (let i = 0; i < subscriptions.length; i++) {
       const existingTopics = JSON.stringify(subscriptions[i].topics?.sort());
 
