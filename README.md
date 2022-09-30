@@ -552,8 +552,9 @@ realtime-ethereum-blockchain-events-tracking-backend-service/
 ✔️ 서버 초기 세팅  
 ✔️ 구독 관리 API 구현  
 ✔️ 이벤트 추적 및 저장 기능 구현  
-✔️ Swagger API Documentation  
-✔️ Readme.md 작성  
+⭐️ 사용자 인증 구현  
+⭐️ Swagger API Documentation  
+⭐️ Readme.md 작성  
 ⭐️ Unit test 수행  
 ⭐️ e2e test 수행  
 ⭐️ 배포  
