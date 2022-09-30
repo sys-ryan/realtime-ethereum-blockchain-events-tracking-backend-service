@@ -35,7 +35,7 @@ export class ChainEventLog {
   @Column({ type: "varchar", length: "255" })
   data: string;
 
-  @Column({ type: "text", array: true })
+  @Column({ type: "simple-array", array: true })
   topics: string[];
 
   @Column({ type: "varchar", length: "255" })
