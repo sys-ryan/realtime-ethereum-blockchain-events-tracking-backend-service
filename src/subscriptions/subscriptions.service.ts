@@ -226,7 +226,7 @@ export class SubscriptionsService {
 
     const requestedTopics = JSON.stringify(createSubscriptionRequestDto.topics.sort());
     for (let i = 0; i < subscriptions.length; i++) {
-      const existingTopics = JSON.stringify(subscriptions[i].topics.sort());
+      const existingTopics = JSON.stringify(subscriptions[i].topics?.sort());
 
       if (requestedTopics === existingTopics) {
         return true;
