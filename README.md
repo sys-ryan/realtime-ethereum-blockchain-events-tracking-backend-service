@@ -621,12 +621,8 @@ realtime-ethereum-blockchain-events-tracking-backend-service/
 
 # 서비스 배포
 
-### 서비스 시작
-<img width="1247" alt="스크린샷 2022-10-01 오전 1 39 56" src="https://user-images.githubusercontent.com/63445753/193328306-7bc73e6b-9b09-496c-b7b1-fcf9e0f1fd2b.png">
+## 배포 서버 : AWS EC2 
 
-### 체인 이벤트 추적 시작
-
-<img width="1247" alt="스크린샷 2022-10-01 오전 1 54 30" src="https://user-images.githubusercontent.com/63445753/193328387-34218051-4057-4a53-8102-f3be43ed9d12.png">
 
 
 ### 체인 이벤트 추적 로그 (실시간)
