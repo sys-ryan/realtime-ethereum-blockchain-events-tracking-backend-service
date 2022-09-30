@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import { IsEnum, IsNumber, IsOptional, Max, Min } from "class-validator";
-import { ChainEventLog } from "src/chain-event-log/entities/chain-event-log.entity";
-import { SORT_ENUM } from "src/common/enums/log.enum";
+import { ChainEventLog } from "../../chain-event-log/entities/chain-event-log.entity";
+import { SORT_ENUM } from "../../common/enums/log.enum";
 
 export class GetSubscriptionLogsQueryDto {
   @ApiPropertyOptional({ default: SORT_ENUM.DESC })

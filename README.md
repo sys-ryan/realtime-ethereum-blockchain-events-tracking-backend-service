@@ -554,8 +554,8 @@ realtime-ethereum-blockchain-events-tracking-backend-service/
 ✔️ 이벤트 추적 및 저장 기능 구현  
 ✔️ Swagger API Documentation  
 ✔️ Readme.md 작성  
-⭐️ Unit test 수행 // TODO
-⭐️ e2e test 수행 // TODO
+⭐️ Unit test 수행  
+⭐️ e2e test 수행  
 ⭐️ 배포 // TODO
 
 # 테스트
@@ -564,70 +564,59 @@ realtime-ethereum-blockchain-events-tracking-backend-service/
 
 ### 테스트 커버리지
 
-// TODO
+#### 구독 관리 서비스
 
-<!--
-#### User Service
+구독 생성
 
-- 유저 생성 기능
-- 유저 생성기 고유한 id 생성
+- contractAddress가 존재하지만 topics의 elements가 다를 경우 새로운 구독 생성
+- contractAddress가 존재하고, topics의 elements가 일치할 경우 ConflictException
 
-### BossRaid Service
+구독 정보 조회
 
-- 보스레이드 상태 조회
+- 존재하지 않는 subscription-id 일 경우 NotFoundException
 
-  - 보스레이드를 시작한 기록이 없다면 canEnter: true
-  - 보스레이드를 플레이중인 유저가 있다면 canEnter: false
-  - 시작한 시간으로부터 레이드 제한 시간 만큼 경과되었으면 canEnter: true
+구독 제거
 
-- 보스레이드 입장
-
-  - 존재하지 않는 userId 로 요청시 예외 처리
-  - 존재하지 않는 level 로 요청시 예외 처리
-  - canEnter: false 일 때 입장 요청시 isEntered: false (입장 거부)
-
-- 보스레이드 종료
-  - 저장된 userId와 raidRecordId에 해당하는 user 불일치일 경우 예외처리
-  - 존재하지 않는 raidRecordId일 경우 예외처리
-  - 이미 종료된 레이드일 경우 예외 처리
-  - 시작한 시간으로부터 레이드 제한시간이 지났다면 예외처리 -->
+- 존재하지 않는 subscription-id일 경우 NotFoundException
 
 ### 테스트 결과
 
-// TODO
+<img width="826" alt="스크린샷 2022-10-01 오전 12 22 04" src="https://user-images.githubusercontent.com/63445753/193305662-7088c9ee-5791-4b54-a076-af51b5489960.png">
 
-<!--
-#### User Service
-
-<img width="612" alt="스크린샷 2022-09-20 오전 3 10 18" src="https://user-images.githubusercontent.com/63445753/191086872-20c622bf-706f-4055-b32b-4b8f1738d4dc.png">
-
-#### BossRaid Service
-
-<img width="876" alt="스크린샷 2022-09-20 오전 3 09 55" src="https://user-images.githubusercontent.com/63445753/191086911-f041a4da-95bc-4854-bc67-06ab05caeb4e.png"> -->
 
 ## e2e Test
 
 ### 테스트 커버리지
 
-// TODO
+#### 구독 관리
+구독 추가
 
-<!--
-#### 보스레이드
+- 구독 추가 API response 데이터 검증
 
-- 보스레이드 입장 성공시 서버 응답값 검증
-- 보스레이드 입장 실패시 서버 응답값 검증
-- 보스레이드 종료시 level에 따른 score 반영 검증
+구독 목록 조회
 
-#### 랭킹
+- 구독 목록 조회 API 동작 테스트
 
-- 랭킹 정보 조회 서버 응답값 검증 -->
+구독 정보 조회
+
+- 구독 정보 조회 API response 데이터 검증
+
+구독 제거
+
+- 구독 제거 API response 데이터 검증
+
+#### 블록체인 이벤트 구독 로그 조회
+
+구독에서 발생한 로그 조회
+
+- 구독에서 발생한 로그 조회시 Query parameter validation 기능 검증
+- query parameter 'start', 'end' default value 적용 검증
+- query parameter 'offset', 'limit' default value 적용 검증
 
 ### 테스트 결과
 
-// TODO
+<img width="769" alt="스크린샷 2022-10-01 오전 12 22 29" src="https://user-images.githubusercontent.com/63445753/193305600-33b54420-eb1f-4a30-8d5f-51516f4787b9.png">
 
-<!--
-<img width="862" alt="스크린샷 2022-09-21 오후 3 39 17" src="https://user-images.githubusercontent.com/63445753/191447376-749ee7a4-3f8d-4cf8-8b41-b826f0b3d0d7.png"> -->
 
 # 서비스 배포
 

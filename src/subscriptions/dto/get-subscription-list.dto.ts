@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BLOCKCHAIN_EVENT_ENUM } from "src/common/enums/event.enum";
+import { BLOCKCHAIN_EVENT_ENUM } from "../../common/enums/event.enum";
 
 export class SubscriptionInfo {
   @ApiProperty({ description: "구독 id" })
