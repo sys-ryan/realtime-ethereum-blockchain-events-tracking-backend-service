@@ -491,7 +491,7 @@ export enum BLOCKCHAIN_EVENT_ENUM {
 
 swagger를 사용하여 제작한 API Docs
 
-[👉 Swagger Docs 바로가기]() //TODO : link 수정
+[👉 Swagger Docs 바로가기](https://app.swaggerhub.com/apis-docs/Sejong-University/realtime-blockchain_events_tracking_backend_service/1#/Subscriptions%20API/SubscriptionsController_getSubscription)  
 
 # 구현 과정
 
